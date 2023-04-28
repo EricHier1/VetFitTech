@@ -232,15 +232,45 @@ def reason_with_enemy():
         final_battle()
 
 def final_battle():
-    player_strength = 10  # Example player strength, replace with actual player stats
-    enemy_strength = random.randint(5, 15)  # Example enemy strength
+    player_hp = 100  # Example player health, replace with actual player stats
+    enemy_hp = 100  # Example enemy health
+    player_attack = 20  # Example player attack, replace with actual player stats
+    enemy_attack = 10  # Example enemy attack
 
-    if player_strength > enemy_strength:
-        print_slow("You have defeated the enemy in the grand battle!")
-        print_slow("Congratulations, you have completed the journey!")
-    else:
-        print_slow("You have been defeated by the powerful enemy.")
-        print_slow("Game Over.")
+    while player_hp > 0 and enemy_hp > 0:
+        print_slow("Battle Menu:")
+        print_slow("1. Attack")
+        print_slow("2. Defend")
+        print_slow("3. Use a potion")
+
+        choice = input("Enter the number of your choice: ")
+
+        if choice == "1":
+            enemy_hp -= player_attack
+            print_slow(f"You attacked the enemy for {player_attack} damage!")
+        elif choice == "2":
+            player_hp += 10  # Example defense value
+            print_slow("You defended and regained 10 health!")
+        elif choice == "3":
+            player_hp += 30  # Example potion heal value
+            print_slow("You used a potion and regained 30 health!")
+        else:
+            print_slow("Invalid choice. Please try again.")
+            continue
+
+        if enemy_hp <= 0:
+            break
+
+        player_hp -= enemy_attack
+        print_slow(f"The enemy attacked you for {enemy_attack} damage!")
+
+        if player_hp <= 0:
+            print_slow("You have been defeated by the powerful enemy.")
+            print_slow("Game Over.")
+        else:
+            print_slow("You have defeated the enemy in the grand battle!")
+            print_slow("Congratulations, you have completed the journey!")
+
 
 
 def dragon_battle():
