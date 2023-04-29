@@ -1,0 +1,98 @@
+% -----------------------------------------------
+% Package imports
+% -----------------------------------------------
+\documentclass[12pt, a4paper]{article}% 'twoside' for printing
+\usepackage[utf8]{inputenc}% Allow input to be UTF-8
+\usepackage[margin=2cm]{geometry}% May be used to set margins
+
+% -----------------------------------------------
+% Document start
+% -----------------------------------------------
+
+\begin{document}
+\{{text_size}}
+
+\section*{Program: {{ program.name }}}
+
+This program was made using \verb|streprogen|,
+the Python strength program generator.
+The latest version can be found at \\
+\verb|https://pypi.python.org/pypi/streprogen/|.
+
+
+\section*{Program parameters}
+\begin{tabular}{l|l}
+	\textbf{Parameter} & \textbf{Value} \\ \hline
+	\verb|duration|             & {{program.duration}} \\
+	\verb|reps_per_exercise|    & {{program.reps_per_exercise}} \\
+	\verb|intensity|            & {{program.intensity}} \\
+	\verb|units|                & {{program.units}}
+\end{tabular}
+
+
+\section*{Exercise information}
+\begin{tabular}{llllll}
+    \textbf{Exercise} & \textbf{Start} & \textbf{End} & \textbf{Reps min}
+    & \textbf{Reps max} & \textbf{Weekly increase} \\ \hline
+	{% for day in program.days %}
+      \textbf{ {{day.name}} } & & & & & \\ \hline
+    {% for exercise in day.exercises%}
+    {% if exercise | is_dynamic_exercise %}
+        \hspace{0.5em}{{exercise.name}} & 
+        {{exercise._progress_information()[0]|round2digits}} {{program.units}} &
+        {{exercise._progress_information()[1]|round2digits}} {{program.units}} & 
+        {{exercise.min_reps}} & {{exercise.max_reps}} &
+        {{exercise._progress_information()[2]}}\%\\
+    {% endif %}
+    {% if exercise | is_static_exercise %}
+        \hspace{0.5em}{{exercise.name}} & \multicolumn{ 5 }{l}{ {{exercise.sets_reps_func(1)}} } \\
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+\end{tabular}
+
+
+\clearpage
+\section*{Program}
+{% if program._rendered == False %}
+Not rendered. Call program.render() to render it.
+{% else %}
+{% for week in range(1, program.duration + 1) %}
+ \subsection*{\hspace{0.25em} Week {{week}} }
+{% for day in program.days %}
+  \subsection*{\hspace{0.5em} {{day.name}} }
+
+
+  \begin{tabular}{l|{% for i in range(table_width - 1) %}l{% endfor %}}
+  \hspace{0.75em} \textbf{Exercise} & \multicolumn{ {{table_width - 1}} }{l}{ \textbf{Sets / reps} } \\ \hline
+  {% for exercise in day.exercises %}
+  {% if exercise | is_dynamic_exercise%}
+      {% for i, chunk in enumerate(chunker(program._rendered[week][day][exercise]['strings'], table_width - 1)) %}
+
+            {% if i == 0 %}
+            \hspace{0.75em} {{exercise.name}}
+            {% else %}
+            \hspace{0.75em}
+            {% endif %}
+            {% for scheme in chunk %}
+            & {{scheme}}
+            {% endfor %}
+            \\
+
+      {% endfor %}
+  {% endif %}
+  {% if exercise | is_static_exercise%}
+  \hspace{0.75em} {{exercise.name}} &  \multicolumn{ {{table_width - 1}} }{l}{ {{exercise.sets_reps_func(week)}} } \\
+  {% endif %}
+      
+      
+  {% endfor %}
+  \end{tabular}
+
+{% endfor %}
+
+{% if clear_pages == True and week != program.duration%}\clearpage{% endif %}
+{% endfor %}
+{% endif %}
+
+\end{document}
