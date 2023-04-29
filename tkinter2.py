@@ -3,12 +3,13 @@ from tkinter import messagebox
 import random
 from streprogen import Program
 
+
 def main():
     # Set a seed for the random number generator for reproducible results
     random.seed(123)
 
     while True:
-        print("\nStrength Program Generator")
+        print("\nFitTechVet Strength Program Generator")
         print("1. Create a new strength program")
         print("2. Exit")
         choice = validate_input("Enter your choice (1 or 2): ", int)
@@ -19,6 +20,7 @@ def main():
             print("Exiting the program...")
             break
 
+
 def validate_input(prompt, data_type):
     while True:
         try:
@@ -27,10 +29,11 @@ def validate_input(prompt, data_type):
         except ValueError:
             print("Invalid input. Please try again.")
             continue
-        
+
+
 def create_strength_program():
     # Get program name
-    name = input("Enter program name: ")
+    name = input("Enter training program name: ")
 
     # Get program duration
     duration = get_program_duration()
@@ -215,7 +218,6 @@ def export_program(program, name):
             print("Invalid choice. Please try again.")
 
 
-
 def randomized_reps(week):
     """A static function can return random strings."""
     return random.choice(["3 x 10", "4 x 8", "5 x 8", "2-3 x 20", "4 x 15"])
@@ -224,7 +226,9 @@ def randomized_reps(week):
 def random_reps(min_value, max_value):
     return random.randint(min_value, max_value)
 
-#GUI 
+# GUI
+
+
 def create_gui():
     global program  # Add this line to declare the 'program' variable globally
     program = None
@@ -235,13 +239,16 @@ def create_gui():
     # Labels
     tk.Label(window, text="Program Name: ").grid(row=0, column=0)
     tk.Label(window, text="Duration (weeks): ").grid(row=1, column=0)
-    tk.Label(window, text="Reps per exercise: ").grid(row=2, column=0)
+    tk.Label(
+        window, text="Reps per exercise (22-28 recommended): ").grid(row=2, column=0)
     tk.Label(window, text="Weight Unit (kg/lbs): ").grid(row=3, column=0)
-    tk.Label(window, text="Rounding Interval: ").grid(row=4, column=0)
-    tk.Label(window, text="Intensity (% of 1RM): ").grid(row=5, column=0)
-    tk.Label(window, text="Bench Press Start Weight: ").grid(row=6, column=0)
-    tk.Label(window, text="Squat Start Weight: ").grid(row=7, column=0)
-    tk.Label(window, text="Deadlift Start Weight: ").grid(row=8, column=0)
+    tk.Label(window, text="Rounding Interval (2.5 kg or 5 lbs): ").grid(
+        row=4, column=0)
+    tk.Label(
+        window, text="Program Intensity (% of 1RM) (Suggest 80-85%): ").grid(row=5, column=0)
+    tk.Label(window, text="Bench Press Starting Weight: ").grid(row=6, column=0)
+    tk.Label(window, text="Squat Starting Weight: ").grid(row=7, column=0)
+    tk.Label(window, text="Deadlift Starting Weight: ").grid(row=8, column=0)
 
     # Entries
     program_name_entry = tk.Entry(window)
@@ -265,16 +272,20 @@ def create_gui():
     deadlift_start_weight_entry.grid(row=8, column=1)
 
     # Submit Button
-    submit_button = tk.Button(window, text="Generate Program", command=lambda: on_submit(window, program_name_entry, program_duration_entry, reps_per_exercise_entry, weight_unit_entry, rounding_interval_entry, intensity_entry, bench_start_weight_entry, squat_start_weight_entry, deadlift_start_weight_entry, output_text))
+    submit_button = tk.Button(window, text="Generate Program", command=lambda: on_submit(window, program_name_entry, program_duration_entry, reps_per_exercise_entry,
+                              weight_unit_entry, rounding_interval_entry, intensity_entry, bench_start_weight_entry, squat_start_weight_entry, deadlift_start_weight_entry, output_text))
     submit_button.grid(row=9, column=0, columnspan=2)
 
     # Output Text widget
-    tk.Label(window, text="Generated Strength Program: ").grid(row=10, column=0)
+    tk.Label(window, text="Generated Strength Program: ").grid(
+        row=10, column=0)
     output_text = tk.Text(window, wrap=tk.WORD, height=10, width=60)
-    output_text.grid(row=11, column=0, columnspan=2, sticky=tk.N+tk.S+tk.E+tk.W)
+    output_text.grid(row=11, column=0, columnspan=2,
+                     sticky=tk.N+tk.S+tk.E+tk.W)
 
     # Export Button
-    export_button = tk.Button(window, text="Export Program to HTML", command=lambda: export_program_html(program, program_name_entry.get()))
+    export_button = tk.Button(window, text="Export Program to HTML",
+                              command=lambda: export_program_html(program, program_name_entry.get()))
     export_button.grid(row=12, column=0, columnspan=2)
 
     # Configure the grid to make the Text widget resizable
@@ -287,7 +298,9 @@ def create_gui():
 
 def on_submit(window, program_name_entry, program_duration_entry, reps_per_exercise_entry, weight_unit_entry, rounding_interval_entry, intensity_entry, bench_start_weight_entry, squat_start_weight_entry, deadlift_start_weight_entry, output_text):
     global program  # Add this line to make the 'program' variable accessible globally
-    window.after(0, validate_and_run_strength_program, window, program_name_entry, program_duration_entry, reps_per_exercise_entry, weight_unit_entry, rounding_interval_entry, intensity_entry, bench_start_weight_entry, squat_start_weight_entry, deadlift_start_weight_entry, output_text)
+    window.after(0, validate_and_run_strength_program, window, program_name_entry, program_duration_entry, reps_per_exercise_entry, weight_unit_entry,
+                 rounding_interval_entry, intensity_entry, bench_start_weight_entry, squat_start_weight_entry, deadlift_start_weight_entry, output_text)
+
 
 def export_program_html(program, name):
     program  # Add this line to make the 'program' variable accessible globally
@@ -303,6 +316,7 @@ def export_program_html(program, name):
 
     messagebox.showinfo("Export Success", f"Program exported as {name}.html")
 
+
 def validate_and_run_strength_program(window, program_name_entry, program_duration_entry, reps_per_exercise_entry, weight_unit_entry, rounding_interval_entry, intensity_entry, bench_start_weight_entry, squat_start_weight_entry, deadlift_start_weight_entry, output_text):
     global program  # Add this line to make the 'program' variable accessible globally
 
@@ -316,22 +330,24 @@ def validate_and_run_strength_program(window, program_name_entry, program_durati
         squat_start_weight = int(squat_start_weight_entry.get())
         deadlift_start_weight = int(deadlift_start_weight_entry.get())
     except ValueError:
-        messagebox.showerror("Invalid input", "Please enter valid numeric values.")
+        messagebox.showerror(
+            "Invalid input", "Please enter valid numeric values.")
         return
-        
+
     weight_unit = weight_unit_entry.get().lower()
-    
+
     if weight_unit not in ["kg", "lbs"]:
-        messagebox.showerror("Invalid input", "Please enter a valid weight unit (kg or lbs).")
+        messagebox.showerror(
+            "Invalid input", "Please enter a valid weight unit (kg or lbs).")
         return
 
     program_name = program_name_entry.get()
     if not program_name:
         messagebox.showerror("Invalid input", "Please enter a program name.")
         return
-    
+
     program = None
-    
+
     # Create the Program instance
     program = Program(
         name=program_name,
@@ -344,7 +360,7 @@ def validate_and_run_strength_program(window, program_name_entry, program_durati
 
     # Add exercises to the program
     add_exercises(program, bench_start_weight,
-                squat_start_weight, deadlift_start_weight, intensity)
+                  squat_start_weight, deadlift_start_weight, intensity)
 
     # Render the program
     program.render()
