@@ -232,6 +232,9 @@ def random_reps(min_value, max_value):
 # GUI
 
 
+root = tk.Tk()
+
+
 def create_gui():
     global program  # Add this line to declare the 'program' variable globally
     program = None
@@ -371,3 +374,8 @@ def validate_and_run_strength_program(window, program_name_entry, program_durati
     # Display the program in the Text widget
     output_text.delete(1.0, tk.END)
     output_text.insert(tk.END, str(program))
+
+
+root.after(0, create_gui)
+
+root.mainloop()
